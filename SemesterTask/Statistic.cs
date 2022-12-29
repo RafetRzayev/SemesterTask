@@ -35,7 +35,7 @@ namespace SemesterTask
                 The line after the last space shows the popularity rate
                 */
                 partyName = line.Trim()[..line.LastIndexOf(" ")];
-                supportPercent = int.Parse(line.Trim()[line.LastIndexOf(" ")..]);
+                supportPercent = int.Parse(line.Trim()[(line.LastIndexOf(" ") + 1)..]);
 
                 supportDetails.Add(new SupportDetail
                 {
@@ -87,7 +87,7 @@ namespace SemesterTask
             foreach (var line in lines)
             {
                 partyName = line.Trim()[..line.LastIndexOf(" ")];
-                supportPercent = int.Parse(line.Trim()[line.LastIndexOf(" ")..]);
+                supportPercent = int.Parse(line.Trim()[(line.LastIndexOf(" ") + 1)..]);
 
                 supportDetails.Add(new SupportDetail
                 {
@@ -121,7 +121,7 @@ namespace SemesterTask
             foreach (var line in lines)
             {
                 partyName = line.Trim()[..line.LastIndexOf(" ")];
-                supportPercent = int.Parse(line.Trim()[line.LastIndexOf(" ")..]);
+                supportPercent = int.Parse(line.Trim()[(line.LastIndexOf(" ") + 1)..]);
 
                 supportDetails.Add(new SupportDetail
                 {
@@ -153,7 +153,8 @@ namespace SemesterTask
 
                 if (partyNameFromFile.Equals(partyName))
                 {
-                    supportPercentYear1 = int.Parse(line.Trim()[line.LastIndexOf(" ")..]);
+                    supportPercentYear1 = int.Parse(line.Trim()[(line.LastIndexOf(" ") + 1)..]);
+
                     break;
                 }
             }
@@ -167,7 +168,8 @@ namespace SemesterTask
 
                 if (partyNameFromFile.Equals(partyName))
                 {
-                    supportPercentYear2 = int.Parse(line.Trim()[line.LastIndexOf(" ")..]);
+                    supportPercentYear2 = int.Parse(line.Trim()[(line.LastIndexOf(" ") + 1)..]);
+
                     break;
                 }
             }
@@ -203,7 +205,7 @@ namespace SemesterTask
                 foreach (var line in lines)
                 {
                     partyName = line.Trim()[..line.LastIndexOf(" ")];
-                    supportPercent = int.Parse(line.Trim()[line.LastIndexOf(" ")..]);
+                    supportPercent = int.Parse(line.Trim()[(line.LastIndexOf(" ") + 1)..]);
 
                     supportDetails.Add(new SupportDetail
                     {
@@ -244,7 +246,7 @@ namespace SemesterTask
                 foreach (var line in lines)
                 {
                     partyName = line.Trim()[..line.LastIndexOf(" ")];
-                    supportPercent = int.Parse(line.Trim()[line.LastIndexOf(" ")..]);
+                    supportPercent = int.Parse(line.Trim()[(line.LastIndexOf(" ") + 1)..]);
 
                     supportDetails.Add(new SupportDetail
                     {
@@ -282,6 +284,8 @@ namespace SemesterTask
                         partyNames.Add(partyName);
                 }
             }
+
+            Console.WriteLine("All party names");
 
             foreach (var item in partyNames)
             {
