@@ -7,7 +7,7 @@ using SemesterTask.Models;
 
 namespace SemesterTask
 {
-    internal class Statistic
+    public class Statistic
     {
         private const string BASE_PATH = @"..\..\..\..\ExamData_2022\Statistics";
 
@@ -194,8 +194,8 @@ namespace SemesterTask
         {
             string partyName;
             int supportPercent;
-            int year1=int.Parse(year1InString);
-            int year2 = int.Parse(year2InString);
+            var year1 = int.Parse(year1InString);
+            var year2 = int.Parse(year2InString);
             var supportDetails = new List<SupportDetail>();
 
             for (int i = Math.Min(year1, year2); i <= Math.Max(year1, year2); i++)
@@ -230,8 +230,8 @@ namespace SemesterTask
         {
             string partyName;
             int supportPercent;
-            int year1 = int.Parse(year1InString);
-            int year2 = int.Parse(year2InString);
+            var year1 = int.Parse(year1InString);
+            var year2 = int.Parse(year2InString);
 
             var supportDetails = new List<SupportDetail>();
 
@@ -267,10 +267,10 @@ namespace SemesterTask
             Console.WriteLine($"{mostPopularPartyName} {maxPercent}% {mostPopularYear}");
         }
 
-        internal void AllPartyNames()
+        public List<string> AllPartyNames()
         {
             string partyName;
-            List<string> partyNames = new List<string>();
+            var partyNames = new List<string>();
 
             for (int i = 2010; i <= 2022; i++)
             {
@@ -286,12 +286,7 @@ namespace SemesterTask
                 }
             }
 
-            Console.WriteLine("All party names");
-
-            foreach (var item in partyNames)
-            {
-                Console.WriteLine(item);
-            }
+            return partyNames;
         }
     }
 }

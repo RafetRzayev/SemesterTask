@@ -10,8 +10,15 @@ namespace SemesterTask
 
             var generalMethods = new GeneralMethods();
             generalMethods.CreateEmail("Tiina-liina näide");
-            generalMethods.CreateAccountName("Ts-liina näide");
-            generalMethods.ElectionWereHeldAt("1995");
+            var accountName = generalMethods.CreateAccountName("Ts-liina näide");
+            Console.WriteLine($"Created {accountName} account name and appended the accountNames.txt file");
+
+            string year = "1995";
+            var electionWereHeldAt = generalMethods.ElectionWereHeldAt(year);
+            if (electionWereHeldAt)
+                Console.WriteLine($"Election were held at {year}");
+            else
+                Console.WriteLine($"Election weren't held at {year}");
 
             Console.WriteLine();
 
@@ -32,8 +39,14 @@ namespace SemesterTask
             Console.WriteLine();
             statistic.MostPopularInRange("2010", "2022");
             Console.WriteLine();
-            statistic.AllPartyNames();
 
+            Console.WriteLine("All party names");
+
+            foreach (var partyName in statistic.AllPartyNames())
+            {
+                Console.WriteLine(partyName);
+            }
+            
             Console.WriteLine();
 
             #endregion

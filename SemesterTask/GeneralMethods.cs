@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace SemesterTask
 {
-    internal class GeneralMethods
+    public class GeneralMethods
     {
         private const string BASE_PATH = @"..\..\..\..\ExamData_2022\accountNames.txt";
 
@@ -30,7 +30,7 @@ namespace SemesterTask
             Console.WriteLine($"Created {eeEmail}, {euEmail}");
         }
 
-        internal void CreateAccountName(string fullName)
+        public string CreateAccountName(string fullName)
         {
             fullName = fullName.Trim().ToLower();
 
@@ -45,26 +45,26 @@ namespace SemesterTask
 
             accountName += nameParts.Last();
 
-            var accountPath = $"{BASE_PATH}";
+            File.AppendAllText(BASE_PATH, accountName + "\n");
 
-            File.AppendAllText(accountPath, accountName + "\n");
-
-            Console.WriteLine($"Created {accountName} account name and appended the accountNames.txt file");
+            return accountName;
         }
 
-        internal void ElectionWereHeldAt(string yearInString)
+        public bool ElectionWereHeldAt(string yearInString)
         {
             if (int.TryParse(yearInString, out int year))
             {
                 if (_electionYears.Contains(year))
-                    Console.WriteLine($"Election were held at {year}");
+                    return true;
                 else
-                    Console.WriteLine($"Election weren't held at {year}");
+                    return false;
             }
             else
             {
                 Console.WriteLine($"{yearInString} doesn't in correct format");
             }
+
+            return false;
         }
     }
 }
