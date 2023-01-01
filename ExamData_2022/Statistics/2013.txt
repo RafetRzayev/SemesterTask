@@ -1,0 +1,7 @@
+Keskerakond 32
+EKRE 2
+Eestimaa Rohelised 3
+Eesti 200 8
+SDE 23
+Isamaa 20
+Reformierakond 19

@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
+using System.Linq;
+using SemesterTask.Models;
 
 namespace SemesterTask
 {
-    internal class ParliamentElectionAnalysis
+    public class ParliamentElectionAnalysis
     {
-        private const string PATH = @"..\..\..\RegionResults_2019.txt";
+        private const string PATH = @"..\..\..\..\ExamData_2022\RegionResults_2019.txt";
         private readonly string[] _lines;
 
         private readonly List<DistrictDetail> _districtDetails;
+        private readonly List<PartyDistrictVote> _partyDistrictVotes;
 
         public ParliamentElectionAnalysis()
         {
@@ -31,135 +33,112 @@ namespace SemesterTask
                 new DistrictDetail{ DistrictNumber = 11,MandatorCount = 8,DistrictName = "Võru-, Valga- ja Põlvamaa" },
                 new DistrictDetail{ DistrictNumber = 12,MandatorCount = 7,DistrictName = "Pärnumaa" },
             };
+
+            _partyDistrictVotes = new List<PartyDistrictVote>();
+
+            for (int i = 1; i < _lines.Length; i++)
+            {
+                var partyDistrictVote = _lines[i].Split(",");
+
+                _partyDistrictVotes.Add(new PartyDistrictVote
+                {
+                    DistrictNumber = int.Parse(partyDistrictVote[0]),
+                    PartyName = partyDistrictVote[1],
+                    VoteCount = int.Parse(partyDistrictVote[2])
+                });
+            }
         }
 
-        internal int ElectoralTresholdValue()
+        public int ElectoralTresholdValue()
         {
-            int totalVotes = 0;
-            string[] votes;
-
-            foreach (var line in _lines)
-            {
-                /*
-                Trim() deletes right and left spaces
-                */
-                votes = line.Trim()[(line.IndexOf(" ") + 1)..].Split(" ");
-
-                foreach (var voteInString in votes)
-                {
-                    if (int.TryParse(voteInString, out int vote))
-                    {
-                        totalVotes += vote;
-                    }
-                }
-            }
+            var totalVotes = _partyDistrictVotes.Sum(x => x.VoteCount);
 
             var tresholdValue = totalVotes * 0.05;
 
             return (int)tresholdValue;
         }
 
-        internal void PartiesExceedTresholdValue()
+        public void PartiesExceedTresholdValue()
         {
             var tresholdValue = ElectoralTresholdValue();
-            string partyName;
-            string[] votes;
-            int totalVotes = 0;
+            int totalVotes;
+            var partyDistrictVoteIndexs = new List<int>();
 
             Console.WriteLine($"{"Party name",-35}{"Votes",-4}");
 
-            foreach (var line in _lines)
+            for (int i = 0; i < _partyDistrictVotes.Count; i++)
             {
-                partyName = line.Trim()[..line.IndexOf(" ")].Replace("_", " ");
-                votes = line.Trim()[(line.IndexOf(" ") + 1)..].Split(" ");
+                if (IsCountedThisPartyCount(partyDistrictVoteIndexs, i))
+                    continue;
 
-                foreach (var voteInString in votes)
+                totalVotes = _partyDistrictVotes[i].VoteCount;
+
+                for (int j = i + 1; j < _partyDistrictVotes.Count; j++)
                 {
-                    if (int.TryParse(voteInString, out int vote))
+                    if (_partyDistrictVotes[i].PartyName.Equals(_partyDistrictVotes[j].PartyName))
                     {
-                        totalVotes += vote;
+                        totalVotes += _partyDistrictVotes[j].VoteCount;
+
+                        partyDistrictVoteIndexs.Add(j);
                     }
                 }
 
                 if (totalVotes >= tresholdValue)
                 {
-                    Console.WriteLine($"{partyName,-35}{totalVotes,-4}");
+                    Console.WriteLine($"{_partyDistrictVotes[i].PartyName,-35}{totalVotes,-4}");
                 }
-                totalVotes = 0;
+            }    
+            
+            bool IsCountedThisPartyCount(List<int> partyDistrictVoteIndexs, int partyDistrictVoteIndex)
+            {
+                if (partyDistrictVoteIndexs.Contains(partyDistrictVoteIndex))
+                    return true;
+
+                return false;
             }
         }
 
-        internal double QuotaForElectoralDistrict(int districtNumber)
+        public double QuotaForElectoralDistrict(int districtNumber)
         {
-            int totalVotes = 0;
-            string[] votes;
-            int mandatorCount = _districtDetails.Find(x => x.DistrictNumber == districtNumber).MandatorCount;
+            var mandatorCount = _districtDetails.Find(x => x.DistrictNumber == districtNumber).MandatorCount;
 
-            foreach (var line in _lines)
-            {
-                /*
-                Trim() deletes right and left spaces
-                */
-                votes = line.Trim()[(line.IndexOf(" ") + 1)..].Split(" ");
-
-                if (int.TryParse(votes[districtNumber - 1], out int vote))
-                {
-                    totalVotes += vote;
-                }
-            }
+            var totalVotes = _partyDistrictVotes.Where(x => x.DistrictNumber == districtNumber).Sum(x => x.VoteCount);
 
             var simpleQuota = (double)totalVotes / mandatorCount;
 
             return simpleQuota;
         }
 
-        internal void DistrictMandators(int districtNumber)
+        public void DistrictMandators(int districtNumber)
         {
             var simpleQuota = QuotaForElectoralDistrict(districtNumber);
-            string partyName;
-            string[] votes;
             double exceedQuota;
 
-            foreach (var line in _lines)
+            var partyVoteCountByDistrict = _partyDistrictVotes.Where(x => x.DistrictNumber == districtNumber);
+
+            foreach (var item in partyVoteCountByDistrict)
             {
-                /*
-                Trim() deletes right and left spaces
-                */
-                partyName = line.Trim()[..line.IndexOf(" ")].Replace("_", " ");
-                votes = line.Trim()[(line.IndexOf(" ") + 1)..].Split(" ");
+                exceedQuota = Math.Round(item.VoteCount / simpleQuota + 0.001);
 
-                if (int.TryParse(votes[districtNumber - 1], out int vote))
-                {
-                    exceedQuota = Math.Round(vote / simpleQuota + 0.001);
-
-                    Console.WriteLine($"{partyName} => {exceedQuota}");
-                }
+                Console.WriteLine($"{item.PartyName} => {exceedQuota}");
             }
         }
 
-        internal void Print(int districtNumber)
+        public void Print(int districtNumber)
         {
             var simpleQuota = QuotaForElectoralDistrict(districtNumber);
-            string partyName;
-            string[] votes;
             double exceedQuota;
 
             Console.WriteLine($"Simple quota for {_districtDetails.Find(x => x.DistrictNumber == districtNumber).DistrictName} is {simpleQuota}");
             Console.WriteLine($"{"Party name",-35}{"Places",-4}");
-            foreach (var line in _lines)
+
+            var partyVoteCountByDistrict = _partyDistrictVotes.Where(x => x.DistrictNumber == districtNumber);
+
+            foreach (var item in partyVoteCountByDistrict)
             {
-                /*
-                Trim() deletes right and left spaces
-                */
-                partyName = line.Trim()[..line.IndexOf(" ")].Replace("_", " ");
-                votes = line.Trim()[(line.IndexOf(" ") + 1)..].Split(" ");
+                exceedQuota = Math.Round(item.VoteCount / simpleQuota + 0.001);
 
-                if (int.TryParse(votes[districtNumber - 1], out int vote))
-                {
-                    exceedQuota = Math.Round(vote / simpleQuota + 0.001);
-
-                    Console.WriteLine($"{partyName,-35}{exceedQuota}");
-                }
+                Console.WriteLine($"{item.PartyName, -35}{exceedQuota,-4}");
             }
         }
     }

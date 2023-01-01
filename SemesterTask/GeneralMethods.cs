@@ -6,7 +6,7 @@ namespace SemesterTask
 {
     internal class GeneralMethods
     {
-        private const string BASE_PATH = @"..\..\..\";
+        private const string BASE_PATH = @"..\..\..\..\ExamData_2022\accountNames.txt";
 
         private readonly int[] _electionYears = { 1992, 1995, 1999, 2003, 2007, 2011, 2015, 2019, 1934, 2005, 2009, 2013, 2017, 2021 };
       
@@ -45,7 +45,7 @@ namespace SemesterTask
 
             accountName += nameParts.Last();
 
-            var accountPath = $"{BASE_PATH}/accountNames.txt";
+            var accountPath = $"{BASE_PATH}";
 
             File.AppendAllText(accountPath, accountName + "\n");
 

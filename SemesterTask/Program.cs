@@ -46,13 +46,38 @@ namespace SemesterTask
             Console.WriteLine();
             electionAnalysis.PartiesExceedTresholdValue();
             Console.WriteLine();
-            var districtNumber = 2;
+            var districtNumber = 11;
             var simpleQuota = electionAnalysis.QuotaForElectoralDistrict(districtNumber);
             Console.WriteLine($"Simple quota for electoral district number {districtNumber} is {simpleQuota}");
             Console.WriteLine();
             electionAnalysis.DistrictMandators(districtNumber);
             Console.WriteLine();
             electionAnalysis.Print(districtNumber);
+
+            Console.WriteLine();
+
+            #endregion
+
+            #region Advanced task
+
+            var advancedTasks = new AdvancedTasks();
+            var mostStabileParties = advancedTasks.MostStabileParties();
+
+            Console.WriteLine("Most stabile parties:");
+            foreach (var item in mostStabileParties)
+            {
+                Console.WriteLine(item);
+            }
+
+            Console.WriteLine();
+
+            var mostFluctuatingParties = advancedTasks.MostFluctuatingParties();
+
+            Console.WriteLine("Most fluctuating parties:");
+            foreach (var item in mostFluctuatingParties)
+            {
+                Console.WriteLine(item);
+            }
 
             #endregion
         }

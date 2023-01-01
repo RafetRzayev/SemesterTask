@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
+using SemesterTask.Models;
 
 namespace SemesterTask
 {
     internal class Statistic
     {
-        private const string BASE_PATH = @"..\..\..\Statistics";
+        private const string BASE_PATH = @"..\..\..\..\ExamData_2022\Statistics";
 
         internal void ParliamentSeatsAmongParties(string year)
         {

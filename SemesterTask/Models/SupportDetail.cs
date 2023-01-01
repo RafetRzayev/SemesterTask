@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-namespace SemesterTask
+namespace SemesterTask.Models
 {
     internal class SupportDetail
     {

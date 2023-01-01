@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SemesterTask
+namespace SemesterTask.Models
 {
     internal class DistrictDetail
     {
