@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SemesterTask.Models;
+using System;
 
 namespace SemesterTask
 {
@@ -9,7 +10,12 @@ namespace SemesterTask
             #region General methods
 
             var generalMethods = new GeneralMethods();
-            generalMethods.CreateEmail("Tiina-liina näide");
+            var createdEmails = generalMethods.CreateEmail("Tiina-liina näide");
+
+            Console.WriteLine($"Created {createdEmails[0]}, {createdEmails[1]}");
+
+            Console.WriteLine();
+
             var accountName = generalMethods.CreateAccountName("Ts-liina näide");
             Console.WriteLine($"Created {accountName} account name and appended the accountNames.txt file");
 
@@ -27,21 +33,46 @@ namespace SemesterTask
             #region Statistics
 
             var statistic = new Statistic();
-            statistic.ParliamentSeatsAmongParties("2022");
+
+            var supportDetails = statistic.ParliamentSeatsAmongParties("2022");
+            /*
+             * In order to make it neat, we allocate 25 characters 
+             * for the party name and 5 characters for the number of chairs
+             */
+            Console.WriteLine($"{"Party name",-25}{"Seats",-5}");
+
+            foreach (var supportDetail in supportDetails)
+            {
+                Console.WriteLine($"{supportDetail.PartyName,-25}{supportDetail.SupportPercent,-5}");
+            }
             Console.WriteLine();
+
+            statistic.PossibleCombinationOfParties("2022");
+            Console.WriteLine();
+
             statistic.PopularityOfParties("2022");
             Console.WriteLine();
+
             statistic.MostAndLeastPopularParty("2022");
             Console.WriteLine();
-            statistic.DifferencePopularity("2020", "2022", "Reformierakond");
+            
+            var difference = statistic.DifferencePopularity("2020", "2022", "Keskerakond");
+
+            if (difference > 0)
+                Console.WriteLine($"grew {difference}%");
+            else if (difference < 0)
+                Console.WriteLine($"decrease {-difference}%");
+            else
+                Console.WriteLine($"Doesn't changed support percantage");
             Console.WriteLine();
+
             statistic.PopularityInRange("2010", "2022");
             Console.WriteLine();
+
             statistic.MostPopularInRange("2010", "2022");
             Console.WriteLine();
 
             Console.WriteLine("All party names");
-
             foreach (var partyName in statistic.AllPartyNames())
             {
                 Console.WriteLine(partyName);
@@ -59,7 +90,7 @@ namespace SemesterTask
             Console.WriteLine();
             electionAnalysis.PartiesExceedTresholdValue();
             Console.WriteLine();
-            var districtNumber = 11;
+            var districtNumber = 4;
             var simpleQuota = electionAnalysis.QuotaForElectoralDistrict(districtNumber);
             Console.WriteLine($"Simple quota for electoral district number {districtNumber} is {simpleQuota}");
             Console.WriteLine();
@@ -74,6 +105,7 @@ namespace SemesterTask
             #region Advanced task
 
             var advancedTasks = new AdvancedTasks();
+
             var mostStabileParties = advancedTasks.MostStabileParties();
 
             Console.WriteLine("Most stabile parties:");
@@ -81,7 +113,6 @@ namespace SemesterTask
             {
                 Console.WriteLine(item);
             }
-
             Console.WriteLine();
 
             var mostFluctuatingParties = advancedTasks.MostFluctuatingParties();

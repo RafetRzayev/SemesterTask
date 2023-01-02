@@ -36,6 +36,9 @@ namespace SemesterTask
 
             _partyDistrictVotes = new List<PartyDistrictVote>();
 
+            /*
+             * We save the data in the RegionResults_2019.txt file to a list
+             */
             for (int i = 1; i < _lines.Length; i++)
             {
                 var partyDistrictVote = _lines[i].Split(",");
@@ -51,6 +54,9 @@ namespace SemesterTask
 
         public int ElectoralTresholdValue()
         {
+            /*
+             * We collect all votes and find 5 percent
+             */
             var totalVotes = _partyDistrictVotes.Sum(x => x.VoteCount);
 
             var tresholdValue = totalVotes * 0.05;
@@ -83,6 +89,9 @@ namespace SemesterTask
                     }
                 }
 
+                /*
+                 * We collect the votes of a party and find out whether it passed 5 percent or not
+                 */
                 if (totalVotes >= tresholdValue)
                 {
                     Console.WriteLine($"{_partyDistrictVotes[i].PartyName,-35}{totalVotes,-4}");
@@ -118,7 +127,7 @@ namespace SemesterTask
 
             foreach (var item in partyVoteCountByDistrict)
             {
-                exceedQuota = Math.Round(item.VoteCount / simpleQuota + 0.001);
+                exceedQuota = Math.Round(item.VoteCount / simpleQuota - 0.001);
 
                 Console.WriteLine($"{item.PartyName} => {exceedQuota}");
             }
@@ -136,7 +145,7 @@ namespace SemesterTask
 
             foreach (var item in partyVoteCountByDistrict)
             {
-                exceedQuota = Math.Round(item.VoteCount / simpleQuota + 0.001);
+                exceedQuota = Math.Round(item.VoteCount / simpleQuota - 0.001);
 
                 Console.WriteLine($"{item.PartyName, -35}{exceedQuota,-4}");
             }

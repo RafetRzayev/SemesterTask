@@ -10,7 +10,7 @@ namespace SemesterTask
 
         private readonly int[] _electionYears = { 1992, 1995, 1999, 2003, 2007, 2011, 2015, 2019, 1934, 2005, 2009, 2013, 2017, 2021 };
       
-        internal void CreateEmail(string fullName)
+        public string[] CreateEmail(string fullName)
         {
             fullName = fullName.Trim().ToLower();
 
@@ -27,7 +27,9 @@ namespace SemesterTask
             var eeEmail = $"{emailUserName}@parlamanet.ee";
             var euEmail = $"{emailUserName}@parlamanet.eu";
 
-            Console.WriteLine($"Created {eeEmail}, {euEmail}");
+            var result = new string[] { eeEmail, euEmail };
+
+            return result;
         }
 
         public string CreateAccountName(string fullName)

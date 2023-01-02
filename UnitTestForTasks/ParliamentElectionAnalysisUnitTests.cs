@@ -1,8 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SemesterTask;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace UnitTestForTasks
 {
@@ -21,12 +18,34 @@ namespace UnitTestForTasks
         }
 
         [TestMethod]
-        public void QuotaForElectoralDistrictTest()
+        public void QuotaForElectoralDistrict11()
         {
             var electionAnalysis = new ParliamentElectionAnalysis();
 
             var realResult = electionAnalysis.QuotaForElectoralDistrict(11);
             var exceptedResult = 5386.25;
+
+            Assert.AreEqual(exceptedResult, realResult);
+        }
+
+        [TestMethod]
+        public void QuotaForElectoralDistrict12()
+        {
+            var electionAnalysis = new ParliamentElectionAnalysis();
+
+            var realResult = electionAnalysis.QuotaForElectoralDistrict(12);
+            var exceptedResult = 5887.857142857143;
+
+            Assert.AreEqual(exceptedResult, realResult);
+        }
+
+        [TestMethod]
+        public void QuotaForElectoralDistrict4()
+        {
+            var electionAnalysis = new ParliamentElectionAnalysis();
+
+            var realResult = electionAnalysis.QuotaForElectoralDistrict(4);
+            var exceptedResult = 6048.6;
 
             Assert.AreEqual(exceptedResult, realResult);
         }

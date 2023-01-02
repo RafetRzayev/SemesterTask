@@ -2,17 +2,22 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
 
 namespace SemesterTask
 {
-    internal class AdvancedTasks
+    public class AdvancedTasks
     {
         private const string BASE_PATH = @"..\..\..\..\ExamData_2022\Statistics";
 
         public List<string> MostStabileParties()
         {
+            /*
+             * First, we find the numerical average of the party's support percentage.
+             * Then we find the numerical average of how much the
+             * percentage of support received by the party differs from the 
+             * average in different years. The smaller this number is,
+             * the more stable the percentage of support is.
+             */
             var result = new List<string>();
 
             string partyName;
@@ -45,7 +50,7 @@ namespace SemesterTask
             decimal commonDifferenceFromAverage = 0.0M;
             var differenceAverageOfAverage = new Dictionary<string, decimal>();
 
-            decimal minDifference = 0.0M;
+            decimal minDifference = decimal.MaxValue;
 
             foreach (var keyValue in supportsOfParty)
             {
@@ -83,6 +88,14 @@ namespace SemesterTask
 
         public List<string> MostFluctuatingParties()
         {
+            /*
+             * First, we find the numerical average of the party's support percentage.
+             * Then we find the numerical average of how much the
+             * percentage of support received by the party differs from the 
+             * average in different years. The bigger this number is, 
+             * the more the support percentage of the party has changed
+             */
+
             var result = new List<string>();
 
             string partyName;
@@ -111,7 +124,7 @@ namespace SemesterTask
                 }
             }
 
-            double average;
+            decimal average;
             decimal commonDifferenceFromAverage = 0.0M;
             var differenceAverageOfAverage = new Dictionary<string, decimal>();
 
@@ -123,11 +136,11 @@ namespace SemesterTask
                 if (keyValue.Value.Count < 3)
                     continue;
 
-                average = keyValue.Value.Average();
+                average =(decimal) keyValue.Value.Average();
 
                 foreach (var percent in keyValue.Value)
                 {
-                    commonDifferenceFromAverage +=(decimal) Math.Abs(average - percent);
+                    commonDifferenceFromAverage += Math.Abs(average - percent);
                 }
 
                 var averageOfAverage = commonDifferenceFromAverage / keyValue.Value.Count;
